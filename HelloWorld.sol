@@ -9,10 +9,17 @@ pragma solidity 0.7.5;
 import "./Ownable.sol";
 import "./Destroyable.sol";
         
+interface GovernmentInterface{
     
+    function addTransaction(address _from, address _to, uint _amount) external; //need entire function header.
+}
+
 //Multiple inheritance start with most baselike(ownable), destroyable has prop of ownable.
 
 contract Bank is Ownable, Destroyable{
+
+                                            //creating instance of GovernmentInterface Ln:12
+    GovernmentInterface GovernmentInstance = GovernmentInterface(0xDA0bab807633f07f013f94DD0E6A4F96F8742B53);
 
     mapping(address => uint) balance;
 
@@ -50,21 +57,21 @@ contract Bank is Ownable, Destroyable{
 
     }
 
- 
+    //getOwner test fxn for './Ownable' => B4 private: address private owner ;After internal: address internal owner  ;
+    // function getOwner () public view returns (address){
+    //     return owner;
+    // }
 
     function transfer(address recipient, uint amount)  public {
-
         require(balance[msg.sender] >= amount, "Balance not sufficient");
 
         require(msg.sender != recipient, "Don't transfer money to yourself");
 
- 
-
         uint previousSenderBalance = balance[msg.sender];
 
- 
-
         _transfer(msg.sender, recipient, amount);
+    //Call to an external contract governmentInstace
+        GovernmentInstance.addTransaction(msg.sender,recipient, amount);
 
         assert(balance[msg.sender] == previousSenderBalance - amount);
 

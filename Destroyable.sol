@@ -1,4 +1,3 @@
-
 // SPDX-License-Identifier: MIT
 import "./Ownable.sol";
 pragma solidity 0.7.5;
